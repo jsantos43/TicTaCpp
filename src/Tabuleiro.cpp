@@ -9,6 +9,9 @@ Tabuleiro::Tabuleiro() {
       valores[i][j] = count + '0';
     }
   }
+
+  total_jogadas = 0;
+  ganhador = '-';
 }
 
 void Tabuleiro::imprimir() {  
@@ -22,11 +25,16 @@ void Tabuleiro::imprimir() {
 }
 
 void Tabuleiro::imprimir_jogo() {
+  limpar_tela();
+
+  std::cout << std::endl;
   std::cout << "=================" << std::endl;
   std::cout << "  Jogo da Velha  " << std::endl;
   std::cout << "=================" << std::endl << std::endl;
 
   imprimir();
+
+  std::cout << std::endl;
 }
 
 void Tabuleiro::limpar_tela() {
@@ -37,12 +45,12 @@ void Tabuleiro::limpar_tela() {
 #endif
 }
 
-bool Tabuleiro::verificar_ganho(){
-  int vezes_O, vezes_X { 0 };
+bool Tabuleiro::verificar_fim(){
+  int vezes_O { 0 }, vezes_X { 0 };
   
-  //Verifica se ganhou por coluna
-  for (int l = 0;l < 3;l++){
-    for (int c = 0;c < 3;c++) {
+  // Verifica se ganhou por linha
+  for (int l {0}; l < 3; l++){
+    for (int c {0}; c < 3; c++) {
       if (valores[l][c] == 'X'){
         vezes_X++;
       }
@@ -65,7 +73,11 @@ bool Tabuleiro::verificar_ganho(){
     vezes_O = 0;
   }
 
-  // Verifica se ganhou por linha
+  // Zerar
+  vezes_X = 0;
+  vezes_O = 0;
+
+  // Verifica se ganhou por coluna
   for (int c = 0; c < 3; c++){
     for (int l = 0; l < 3; l++) {
       if (valores[l][c] == 'X'){
@@ -91,6 +103,11 @@ bool Tabuleiro::verificar_ganho(){
     vezes_O = 0;
   }
 
+  // Zerar
+  vezes_X = 0;
+  vezes_O = 0;
+
+  // Verificar se ganhou pela diagonal principal
   for (int i {0}; i < 3; i++) {
     if (valores[i][i] == 'O') {
       vezes_O++;
@@ -107,6 +124,7 @@ bool Tabuleiro::verificar_ganho(){
     return true;
   }
 
+  // Verificar se ganhou pela diagonal secundária
   if (valores[2][0] == 'O' && valores[1][1] == 'O' && valores[0][2] == 'O') {
     ganhador = 'O';
     return true;
@@ -115,8 +133,8 @@ bool Tabuleiro::verificar_ganho(){
     return true;
   }
 
-  ganhador = '-';
-  return false;
+  // Verificar empate
+  return (total_jogadas >= 9);
 }
 
 bool Tabuleiro::registrar_jogada(int pos, char player) {
@@ -130,10 +148,14 @@ bool Tabuleiro::registrar_jogada(int pos, char player) {
       if (valores[l][c] == pos + '0') {
         valores[l][c] = player;
 
+        total_jogadas++;
+
         return true;
       }
     }
   }
+
+  return false;
 }
 
 char Tabuleiro::get_ganhador() {
