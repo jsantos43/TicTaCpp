@@ -11,6 +11,7 @@ class Tabuleiro {
     int total_jogadas;
   public:
     Tabuleiro();
+    Tabuleiro(Tabuleiro&);
     void imprimir();
     void imprimir_jogo();
     void limpar_tela();

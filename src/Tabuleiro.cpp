@@ -14,6 +14,17 @@ Tabuleiro::Tabuleiro() {
   ganhador = '-';
 }
 
+Tabuleiro::Tabuleiro(Tabuleiro& t) {
+  for (int i {0}; i < 3; i++) {
+    for (int j {0}; j < 3; j++) {
+      valores[i][j] = t.valores[i][j];
+    }
+  }
+
+  total_jogadas = t.total_jogadas;
+  ganhador = t.ganhador;
+}
+
 void Tabuleiro::imprimir() {  
   for (int l = 0; l < 3; l++) {
     for (int c = 0; c < 3; c++) {
